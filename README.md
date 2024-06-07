@@ -19,7 +19,7 @@ JavaScript Runtime(Both Frontend and Backend)
 
 - [Bun](https://bun.sh/) v1.1.8
 
-### Getting Started
+## Getting Started
 
 To run it locally, follow these steps:
 
@@ -32,7 +32,6 @@ git clone git@github.com:yutakusuno/bun-hono-react-websocket.git
 For backend, install dependencies and start the backend server:
 
 ```
-cd backend
 bun i
 bun run dev
 ```
