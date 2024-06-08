@@ -3,7 +3,9 @@
     "dev": "bun run --hot server/index.ts"
   },
   "dependencies": {
-    "hono": "^4.4.2"
+    "@hono/zod-validator": "^0.2.2",
+    "hono": "^4.4.2",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bun": "latest"
