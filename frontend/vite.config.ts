@@ -9,7 +9,7 @@ export default defineConfig({
     alias: {
       '@': path.resolve(import.meta.dir, './src'),
       '@server': path.resolve(import.meta.dir, '../server'),
-      '@shared': path.resolve(import.meta.dir, '../shared'), // Use import.meta.url instead of import.meta.dir
+      '@shared': path.resolve(import.meta.dir, '../shared'),
     },
   },
 });

@@ -2,7 +2,6 @@ import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import { z } from 'zod';
 import { hc } from 'hono/client';
 
-import type { AppType } from '@server/index';
 import {
   Message,
   MessageFormSchema,
@@ -11,10 +10,10 @@ import {
   publishActions,
 } from '@shared/types';
 import { BACKEND_DEV_WS_URL, BACKEND_DEV_URL } from '@shared/constants';
+import type { AppType } from '@server/index';
 import './App.css';
 
 const honoClient = hc<AppType>(BACKEND_DEV_URL);
-
 const initialValues: MessageFormValues = {
   userId: Math.random().toString(36).slice(-8),
   text: '',
@@ -29,12 +28,10 @@ function App() {
   useEffect(() => {
     const fetchMessages = async () => {
       const response = await honoClient.messages.$get();
-
       if (!response.ok) {
         console.error('Failed to fetch messages');
         return;
       }
-
       const messages: Message[] = await response.json();
       setMessages(messages);
     };
@@ -46,20 +43,17 @@ function App() {
     const socket = new WebSocket(`${BACKEND_DEV_WS_URL}/ws`);
 
     socket.onopen = (event) => {
-      console.log('WebSocket client connected', event);
+      console.log('WebSocket client opened', event);
     };
 
     socket.onmessage = (event) => {
       try {
         const data: DataToSend = JSON.parse(event.data.toString());
-
         switch (data.action) {
           case publishActions.UPDATE_CHAT:
-            console.log('UPDATE_CHAT action', data);
             setMessages((prev) => [...prev, data.message]);
             break;
           case publishActions.DELETE_CHAT:
-            console.log('DELETE_CHAT action', data);
             setMessages((prev) =>
               prev.filter((message) => message.id !== data.message.id)
             );
@@ -73,7 +67,7 @@ function App() {
     };
 
     socket.onclose = (event) => {
-      console.log('WebSocket client disconnected', event);
+      console.log('WebSocket client closed', event);
     };
 
     return () => {
@@ -91,19 +85,15 @@ function App() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const validatedValues = MessageFormSchema.parse(formValues);
-
       const response = await honoClient.messages.$post({
         form: validatedValues,
       });
-
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
 
-      // Clear form values and errors
       setFormValues(initialValues);
       setFormErrors([]);
     } catch (error) {
@@ -121,7 +111,6 @@ function App() {
       const response = await honoClient.messages[':id'].$delete({
         param: { id: id.toString() },
       });
-
       if (!response.ok) {
         throw new Error('Failed to delete message');
       }
@@ -131,7 +120,7 @@ function App() {
   };
 
   return (
-    <div className="container mx-auto max-w-md bg-gray-900 text-white">
+    <div className="container mx-auto max-w-lg bg-gray-900 text-white">
       <div className="flex flex-col h-screen">
         <div className="overflow-auto mb-4 flex-grow">
           {messages.map((message) => (

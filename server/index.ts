@@ -13,7 +13,7 @@ import {
 import { FRONTEND_DEV_URL, BACKEND_DEV_URL } from '../shared/constants';
 
 const app = new Hono();
-const topic = 'anonymous-room';
+app.use('*', cors({ origin: FRONTEND_DEV_URL }));
 
 const { upgradeWebSocket, websocket } = createBunWebSocket();
 const server = Bun.serve({
@@ -22,13 +22,7 @@ const server = Bun.serve({
   websocket,
 });
 
-app.use(
-  '*',
-  cors({
-    origin: FRONTEND_DEV_URL,
-  })
-);
-
+const topic = 'anonymous-chat-room';
 const messages: Message[] = [];
 
 const messagesRoute = app
@@ -44,13 +38,12 @@ const messagesRoute = app
     }),
     async (c) => {
       const param = c.req.valid('form');
-
+      const currentDateTime = new Date();
       const message: Message = {
-        id: Date.now(),
-        date: new Date().toLocaleString(),
+        id: Number(currentDateTime),
+        date: currentDateTime.toLocaleString(),
         ...param,
       };
-
       const data: DataToSend = {
         action: publishActions.UPDATE_CHAT,
         message: message,
@@ -83,22 +76,20 @@ const messagesRoute = app
 
 app.get(
   '/ws',
-  upgradeWebSocket((_) => {
-    return {
-      onOpen(_, ws) {
-        const rawWs = ws.raw as ServerWebSocket;
-        rawWs.subscribe(topic);
-        console.log(
-          `WebSocket server opened and subscribed to topic '${topic}'`
-        );
-      },
-      onClose(_, ws) {
-        const rawWs = ws.raw as ServerWebSocket;
-        rawWs.unsubscribe(topic);
-        console.log(`WebSocket server unsubscribed from topic '${topic}'`);
-      },
-    };
-  })
+  upgradeWebSocket((_) => ({
+    onOpen(_, ws) {
+      const rawWs = ws.raw as ServerWebSocket;
+      rawWs.subscribe(topic);
+      console.log(`WebSocket server opened and subscribed to topic '${topic}'`);
+    },
+    onClose(_, ws) {
+      const rawWs = ws.raw as ServerWebSocket;
+      rawWs.unsubscribe(topic);
+      console.log(
+        `WebSocket server closed and unsubscribed from topic '${topic}'`
+      );
+    },
+  }))
 );
 
 export default app;
