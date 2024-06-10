@@ -7,9 +7,12 @@ import {
   MessageFormSchema,
   MessageFormValues,
   DataToSend,
-  publishActions,
 } from '@shared/types';
-import { BACKEND_DEV_WS_URL, BACKEND_DEV_URL } from '@shared/constants';
+import {
+  BACKEND_DEV_WS_URL,
+  BACKEND_DEV_URL,
+  publishActions,
+} from '@shared/constants';
 import type { AppType } from '@server/index';
 import './App.css';
 

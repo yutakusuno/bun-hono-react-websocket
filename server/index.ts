@@ -4,13 +4,12 @@ import { zValidator } from '@hono/zod-validator';
 import { createBunWebSocket } from 'hono/bun';
 import type { ServerWebSocket } from 'bun';
 
+import { Message, MessageFormSchema, DataToSend } from '../shared/types';
 import {
-  Message,
-  MessageFormSchema,
-  DataToSend,
+  FRONTEND_DEV_URL,
+  BACKEND_DEV_URL,
   publishActions,
-} from '../shared/types';
-import { FRONTEND_DEV_URL, BACKEND_DEV_URL } from '../shared/constants';
+} from '../shared/constants';
 
 const app = new Hono();
 app.use('*', cors({ origin: FRONTEND_DEV_URL }));

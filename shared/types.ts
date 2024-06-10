@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { publishActions } from './constants';
 
 export const MessageFormSchema = z.object({
   userId: z.string().min(1),
@@ -6,11 +7,6 @@ export const MessageFormSchema = z.object({
 });
 
 export type MessageFormValues = z.infer<typeof MessageFormSchema>;
-
-export const publishActions = {
-  UPDATE_CHAT: 'UPDATE_CHAT',
-  DELETE_CHAT: 'DELETE_CHAT',
-} as const;
 
 type PublishAction = (typeof publishActions)[keyof typeof publishActions];
 

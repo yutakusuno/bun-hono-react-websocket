@@ -1,6 +1,6 @@
 # Bun-Hono-React-WebSocket
 
-This repository contains a WebSocket real-time chat application with a frontend built using React and a backend powered by Hono, both utilizing TypeScript and Bun for an optimized development experience.
+This repository contains a simple messaging app with a frontend built using React and a backend powered by Hono, both utilizing TypeScript and Bun for an optimized development experience.
 
 [![Chat demo video](https://i.sstatic.net/Vp2cE.png)](https://github.com/yutakusuno/bun-hono-react-websocket/assets/56626111/31efa2f7-c6d7-478b-b4f7-27ce14e5b984)
 
